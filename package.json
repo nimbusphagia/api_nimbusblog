@@ -1,0 +1,36 @@
+{
+  "name": "api_nimbusblog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nimbusphagia/api_nimbusblog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/nimbusphagia/api_nimbusblog/issues"
+  },
+  "homepage": "https://github.com/nimbusphagia/api_nimbusblog#readme",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "jsonwebtoken": "^9.0.3",
+    "nanoid": "^5.1.6",
+    "passport-jwt": "^4.0.1",
+    "pg": "^8.17.2",
+    "prisma": "^7.3.0"
+  }
+}
