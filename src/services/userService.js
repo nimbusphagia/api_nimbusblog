@@ -1,5 +1,6 @@
 import models from '../models/index.js'
-import bcrypt from 'bcrypt'
+import { hash } from '../lib/utils.js';
+
 
 async function create({ email, name, password }) {
   // Check email is unique
@@ -7,7 +8,7 @@ async function create({ email, name, password }) {
   if (existing) throw new Error('EMAIL_UNAVAILABLE');
 
   // Hash password
-  const hash = await bcrypt.hash(password, 10);
+  const hash = await hash(password);
 
   // Get default role
   const role = await models.role.findOne('viewer');
@@ -18,9 +19,22 @@ async function create({ email, name, password }) {
 
   return await models.user.create({ email, name, password: hash, roleId });
 }
-// Superficial get
+async function showById(id) {
+  // Superficial get
+  const user = await models.user.showById(id);
+  if (!user) {
+    throw new Error('USER_NOT_FOUND');
+  }
+  return user;
+}
 async function getById(id) {
   const user = await models.user.findById(id);
+  if (!user) throw new Error('USER_NOT_FOUND');
+
+  return user;
+}
+async function getByEmail(email) {
+  const user = await models.user.findByEmail(email);
   if (!user) {
     throw new Error('USER_NOT_FOUND');
   }
@@ -30,5 +44,17 @@ async function getAll() {
   const users = await models.user.findAll();
   return users;
 }
+async function update(id, input) {
+  const { name, email, password } = input;
+  const user = await models.user.findById(id);
+  if (!user) throw new Error('USER_NOT_FOUND');
 
-export default { create, getAll, getById }
+  const newData = {};
+  if (name) newData.name = name;
+  if (email) newData.email = email;
+  if (password) newData.password = await hash(password);
+  if (Object.keys(newData).length === 0) throw new Error('NO_FIELDS_TO_UPDATE');
+  const updatedUser = await models.user.update(id, newData);
+  return updatedUser;
+}
+export default { create, getAll, getById, getByEmail, update }

@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
     message: 'Welcome to the api',
   })
 })
-app.use(router);
+app.use('/api', router);
 app.use(errorHandler);
 app.listen(process.env.PORT, () => {
   console.log(`Example app listening on port ${process.env.PORT}!`);

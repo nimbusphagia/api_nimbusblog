@@ -8,7 +8,8 @@ async function create(data) {
 async function findAll() {
   return await prisma.user.findMany();
 }
-async function findById(id) {
+async function showById(id) {
+  // Superficial find 
   return await prisma.user.findFirst({
     where: {
       id,
@@ -20,6 +21,13 @@ async function findById(id) {
           name: true,
         }
       },
+    }
+  });
+}
+async function findById(id) {
+  return await prisma.user.findUnique({
+    where: {
+      id,
     }
   });
 }
@@ -46,4 +54,4 @@ async function deleteById(id) {
 }
 
 
-export default { create, findAll, findById, findByEmail, update, deleteById };
+export default { create, findAll, findById, showById, findByEmail, update, deleteById };

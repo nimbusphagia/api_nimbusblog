@@ -1,12 +1,15 @@
 import { Router } from "express";
 import roleRouter from "./role.js";
 import userRouter from "./user.js";
-
+import authRouter from "./auth.js";
+import passport from "../../config/passport.js";
 
 const router = new Router();
 
-//Maybe better optional
+router.use('/auth', authRouter);
+
+router.use(passport.authenticate("jwt", { session: false }));
 router.use('/role', roleRouter);
-router.use('/user', userRouter);
+router.use('/users', userRouter);
 
 export default router;
