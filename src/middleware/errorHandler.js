@@ -41,7 +41,11 @@ export function errorHandler(err, req, res, next) {
     INVALID_BLOCK_TYPE: {
       status: 400,
       message: "Blocks can only be 'TEXT', 'IMAGE', 'HEADING' ",
-    }
+    },
+    INVALID_BLOCK_ARRAY: {
+      status: 400,
+      message: "Entry blocks must be wrapped in an array",
+    },
   };
 
   const error = errorMap[err.message];

@@ -40,10 +40,14 @@ async function update(req, res, next) {
   }
 }
 async function deleteById(req, res, next) {
-
+  try {
+    const { blockId } = req.params;
+    await blockService.deleteById(blockId);
+    res.status(204);
+  } catch (error) {
+    next(error);
+  }
 }
-async function reorder(req, res, next) {
 
-}
-export default { create, update, getByEntry, deleteById, reorder, getById };
+export default { create, update, getByEntry, deleteById, getById };
 

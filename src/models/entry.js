@@ -11,18 +11,9 @@ import { prisma } from "../prismaClient.js";
   publishedAt DateTime?
   likes       Like[]
 }
-
  */
 
 async function create(data) {
-  /*
-   data:{
-    title,
-    authorId,
-    blocks,
-    publishedAt,
-   }
-   */
   return await prisma.entry.create({
     data,
   })
@@ -43,7 +34,6 @@ async function update(id, data) {
   /*
    data:{
     title,
-    blocks,
     publishedAt,
    }
    */
@@ -54,6 +44,28 @@ async function update(id, data) {
     data,
   });
 }
+async function updateBlocks(entryId, blocks) {
+  return prisma.$transaction(async (tx) => {
+    await tx.block.deleteMany({
+      where: { entryId },
+    });
+
+    await tx.block.createMany({
+      data: blocks.map((block, index) => ({
+        entryId,
+        type: block.type,
+        content: block.content,
+        order: index,
+      })),
+    });
+
+    return tx.entry.findUnique({
+      where: { id: entryId },
+      include: { blocks: true },
+    });
+  });
+}
+
 async function deleteById(id) {
   return await prisma.entry.delete({
     where: {
@@ -62,4 +74,4 @@ async function deleteById(id) {
   });
 }
 
-export default { create, findById, findAll, update, deleteById }
+export default { create, findById, findAll, update, updateBlocks, deleteById }

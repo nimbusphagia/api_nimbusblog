@@ -28,6 +28,13 @@ async function findById(id) {
   return await prisma.user.findUnique({
     where: {
       id,
+    },
+    include: {
+      role: {
+        select: {
+          name: true
+        }
+      }
     }
   });
 }
