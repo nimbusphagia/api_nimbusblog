@@ -1,21 +1,5 @@
 import { prisma } from "../prismaClient.js";
 
-/*
-model Block {
-  id        String    @id @default(uuid())
-  entry     Entry     @relation(fields: [entryId], references: [id])
-  entryId   String
-  blockType BlockType
-  index     Int
-  text      String
-  mediaSrc  String
-}
-enum BlockType {
-  TEXT
-  IMAGE
-  HEADING
-} */
-
 async function create(data) {
   /*
    data:{
@@ -37,8 +21,8 @@ async function findById(id) {
     }
   });
 }
-async function findAll() {
-  return await prisma.block.findMany();
+async function findAll(where = {}) {
+  return await prisma.block.findMany({ where });
 }
 async function update(id, data) {
   /*

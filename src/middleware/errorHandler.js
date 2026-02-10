@@ -14,13 +14,33 @@ export function errorHandler(err, req, res, next) {
       status: 404,
       message: "User not found",
     },
+    BLOCK_NOT_FOUND: {
+      status: 404,
+      message: "Block not found",
+    },
+    ENTRY_NOT_FOUND: {
+      status: 404,
+      message: "Entry not found",
+    },
+    COMMENT_NOT_FOUND: {
+      status: 404,
+      message: "Comment not found",
+    },
+    LIKE_NOT_FOUND: {
+      status: 404,
+      message: "Like not found",
+    },
     NO_FIELDS_TO_UPDATE: {
       status: 400,
       message: "No fields provided to update",
     },
     INVALID_CREDENTIALS: {
       status: 401,
-      message: "Invalid credentials"
+      message: "Invalid credentials",
+    },
+    INVALID_BLOCK_TYPE: {
+      status: 400,
+      message: "Blocks can only be 'TEXT', 'IMAGE', 'HEADING' ",
     }
   };
 

@@ -34,9 +34,9 @@ async function findById(id) {
     }
   });
 }
-async function findAll() {
+async function findAll(where = {}) {
   return await prisma.entry.findMany({
-
+    where
   });
 }
 async function update(id, data) {
