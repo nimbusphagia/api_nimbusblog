@@ -39,5 +39,6 @@ async function update(req, res, next) {
     next(error);
   }
 }
+// Update user role
 export default { create, update, getOne, getAll };
 

@@ -27,7 +27,10 @@ async function findById(id) {
 }
 async function findAll(where = {}) {
   return await prisma.entry.findMany({
-    where
+    where,
+    include: {
+      blocks: true,
+    }
   });
 }
 async function update(id, data) {

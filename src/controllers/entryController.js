@@ -2,8 +2,8 @@ import entryService from "../services/entryService.js";
 
 async function create(req, res, next) {
   try {
-    const { entryId } = req.body;
-    const newEntry = await entryService.create({ entryId });
+    const { authorId } = req.params;
+    const newEntry = await entryService.create({ authorId });
     res.status(201).json(newEntry);
   } catch (error) {
     next(error);
@@ -35,8 +35,8 @@ async function update(req, res, next) {
     const { title } = req.body;
     // Not passing Blocks Array because blocks should be created with an entryId already, 
     // even when editing, no need to directly move a block to an entry
-    const updatedBlock = await blockService.update(entryId, { title });
-    res.status(200).json(updatedBlock);
+    const updatedEntry = await entryService.update(entryId, { title });
+    res.status(200).json(updatedEntry);
   } catch (error) {
     next(error);
   }

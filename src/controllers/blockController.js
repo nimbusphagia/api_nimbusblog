@@ -2,7 +2,8 @@ import blockService from "../services/blockService.js";
 
 async function create(req, res, next) {
   try {
-    const { entryId, blockType } = req.body;
+    const { entryId } = req.params;
+    const { blockType } = req.body;
     const newBlock = await blockService.create({ entryId, blockType });
     res.status(201).json(newBlock);
   } catch (error) {

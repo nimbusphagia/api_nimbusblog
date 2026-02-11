@@ -56,7 +56,7 @@ async function update(id, input) {
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
 
-  if (blocks.length > 0) {
+  if (Array.isArray(blocks) && blocks.length > 0) {
     await models.entry.updateBlocks(id, blocks);
   }
 

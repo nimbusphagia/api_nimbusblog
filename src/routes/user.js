@@ -1,6 +1,5 @@
 import { Router } from "express";
 import userController from "../controllers/userController.js";
-import { body } from "express-validator";
 import { validate } from "../middleware/validate.js";
 import { idValidator, dataValidator } from "../middleware/userValidator.js";
 
@@ -30,5 +29,7 @@ userRouter.patch(
   validate,
   userController.update
 )
+
+// DELETE
 
 export default userRouter;

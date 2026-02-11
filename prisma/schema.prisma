@@ -47,9 +47,9 @@ model Block {
   entry     Entry     @relation(fields: [entryId], references: [id])
   entryId   String
   blockType BlockType
-  index     Int
-  text      String
-  mediaSrc  String
+  index     Int?
+  text      String?
+  mediaSrc  String?
 }
 
 enum BlockType {
