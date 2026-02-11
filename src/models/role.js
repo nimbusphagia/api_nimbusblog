@@ -8,10 +8,17 @@ async function create(name) {
   });
   return newRole;
 };
-async function findOne(name) {
-  const role = await prisma.role.findFirst({
+async function find(name) {
+  const role = await prisma.role.findUnique({
     where: {
-      name: name,
+      name,
+    }
+  });
+  return role;
+} async function findById(id) {
+  const role = await prisma.role.findUnique({
+    where: {
+      id
     }
   });
   return role;
@@ -39,4 +46,4 @@ async function deleteById(id) {
   });
 }
 
-export default { create, findOne, findAll, update, deleteById };
+export default { create, find, findAll, update, deleteById };

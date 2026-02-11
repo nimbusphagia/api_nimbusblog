@@ -1,11 +1,11 @@
 import { Router } from "express";
 import blockController from "../controllers/blockController.js";
 
-const blockRouter = new Router();
+const blockRouter = new Router({ mergeParams: true });
 
-blockRouter.get('/:entryId', blockController.getByEntry);
+blockRouter.get('/', blockController.getByEntry);
 
-blockRouter.post('/:entryId', blockController.create);
+blockRouter.post('/', blockController.create);
 
 blockRouter.patch('/:blockId', blockController.update);
 

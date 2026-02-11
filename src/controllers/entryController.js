@@ -2,8 +2,8 @@ import entryService from "../services/entryService.js";
 
 async function create(req, res, next) {
   try {
-    const { authorId } = req.params;
-    const newEntry = await entryService.create({ authorId });
+    const { userId } = req.params;
+    const newEntry = await entryService.create({ userId });
     res.status(201).json(newEntry);
   } catch (error) {
     next(error);
@@ -11,8 +11,9 @@ async function create(req, res, next) {
 }
 async function getByAuthor(req, res, next) {
   try {
-    const { authorId } = req.params;
-    const entries = await entryService.getByAuthor(authorId);
+    const { userId } = req.params;
+    console.log(userId);
+    const entries = await entryService.getByAuthor(userId);
     res.status(200).json(entries);
   } catch (error) {
     next(error);

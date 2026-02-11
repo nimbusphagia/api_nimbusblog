@@ -11,9 +11,9 @@ async function create({ email, name, password }) {
   const hash = await hash(password);
 
   // Get default role
-  const role = await models.role.findOne('viewer');
+  const role = await models.role.find('VIEWER');
   if (!role) {
-    const newRole = await models.role.create('viewer');
+    const newRole = await models.role.create('VIEWER');
   }
   const roleId = role ? role.id : newRole.id;
 
@@ -57,4 +57,11 @@ async function update(id, input) {
   const updatedUser = await models.user.update(id, newData);
   return updatedUser;
 }
-export default { create, getAll, getById, getByEmail, update }
+async function updateRole(id) {
+  const user = await models.user.findById(id);
+  if (user.role.name !== 'VIEWER') throw new Error('INVALID_UPGRADE');
+  const authorRole = await models.role.find('AUTHOR');
+  if (!authorRole) await models.role.create('AUTHOR');
+  return await models.user.updateRole(id);
+}
+export default { create, getAll, getById, getByEmail, update, updateRole }

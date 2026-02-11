@@ -44,7 +44,7 @@ async function deleteById(req, res, next) {
   try {
     const { blockId } = req.params;
     await blockService.deleteById(blockId);
-    res.status(204);
+    res.status(200).json({ message: "Deleted successfully" });
   } catch (error) {
     next(error);
   }

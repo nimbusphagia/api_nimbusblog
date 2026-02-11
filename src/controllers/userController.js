@@ -39,6 +39,14 @@ async function update(req, res, next) {
     next(error);
   }
 }
-// Update user role
-export default { create, update, getOne, getAll };
+async function updateRole(req, res, next) {
+  try {
+    const { userId } = req.params;
+    const updatedUser = await userService.updateRole(userId);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+}
+export default { create, update, updateRole, getOne, getAll };
 

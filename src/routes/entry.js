@@ -1,11 +1,15 @@
 import { Router } from "express";
 import entryController from "../controllers/entryController.js";
+import blockRouter from "./block.js";
 
-const entryRouter = new Router();
+const entryRouter = new Router({ mergeParams: true });
 
-entryRouter.get('/:authorId', entryController.getByAuthor);
+// Blocks Router
+entryRouter.use('/:entryId/blocks', blockRouter);
 
-entryRouter.post('/:authorId', entryController.create);
+entryRouter.get('/', entryController.getByAuthor);
+
+entryRouter.post('/', entryController.create);
 
 entryRouter.patch('/:entryId', entryController.update);
 

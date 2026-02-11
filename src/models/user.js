@@ -59,6 +59,21 @@ async function deleteById(id) {
     where: { id }
   })
 }
+async function updateRole(id) {
+  return await prisma.$transaction(async (tx) => {
+
+    const authorRole = await tx.role.findUnique({
+      where: { name: 'AUTHOR' }
+    });
+    const updatedUser = await tx.user.update({
+      where: { id },
+      data: {
+        roleId: authorRole.id
+      }
+    });
+    return updatedUser;
+  });
+}
 
 
-export default { create, findAll, findById, showById, findByEmail, update, deleteById };
+export default { create, findAll, findById, showById, findByEmail, update, updateRole, deleteById };

@@ -39,21 +39,35 @@ async function getAll() {
 async function update(id, input) {
   const { blockType, text, mediaSrc } = input;
 
-  // Verify valid blocktype
+  // Validate blockType if provided
   if (blockType && !validTypes.includes(blockType)) {
     throw new Error('INVALID_BLOCK_TYPE');
   }
-
+  // Validate block exists
   const block = await models.block.findById(id);
   if (!block) throw new Error('BLOCK_NOT_FOUND');
 
+  const effectiveBlockType = blockType ?? block.blockType;
+
   const newData = {};
-  if (blockType !== undefined) newData.blockType = blockType;
-  if (text !== undefined) newData.text = text;
-  if (mediaSrc !== undefined) newData.mediaSrc = mediaSrc;
-  if (Object.keys(newData).length === 0) throw new Error('NO_FIELDS_TO_UPDATE');
+
+  if (blockType !== undefined) {
+    newData.blockType = blockType;
+  }
+
+  if (effectiveBlockType === 'TEXT') {
+    if (text !== undefined) newData.text = text;
+  } else if (effectiveBlockType === 'IMAGE') {
+    if (mediaSrc !== undefined) newData.mediaSrc = mediaSrc;
+  }
+
+  if (Object.keys(newData).length === 0) {
+    throw new Error('NO_FIELDS_TO_UPDATE');
+  }
+
   return await models.block.update(id, newData);
 }
+
 async function deleteById(id) {
   const block = await models.block.findById(id);
   if (!block) throw new Error('BLOCK_NOT_FOUND');
