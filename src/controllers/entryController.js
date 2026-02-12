@@ -12,7 +12,6 @@ async function create(req, res, next) {
 async function getByAuthor(req, res, next) {
   try {
     const { userId } = req.params;
-    console.log(userId);
     const entries = await entryService.getByAuthor(userId);
     res.status(200).json(entries);
   } catch (error) {

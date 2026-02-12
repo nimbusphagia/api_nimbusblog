@@ -63,7 +63,7 @@ async function updateRole({ id, role }) {
   const user = await models.user.findById(id);
   if (!user) throw new Error('USER_NOT_FOUND');
   if (!userRoles.includes(role)) throw new Error('INVALID_ROLE');
-  return await models.user.update({ id, role });
+  return await models.user.update({ id, data: { role: role } });
 }
 async function deleteById(id) {
   const user = await models.user.findById(id);

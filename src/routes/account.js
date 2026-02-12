@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const accountRouter = new Router();
 
-// User 
+// All users 
 
 accountRouter.get('/');
 accountRouter.patch('/');
@@ -14,6 +14,7 @@ accountRouter.post('/comments');
 accountRouter.patch('/comments/:commentId');
 accountRouter.delete('/comments/:commentId');
 
+// Author only
 accountRouter.get('/entries');
 accountRouter.get('/entries/:entryId');
 accountRouter.post('/entries');

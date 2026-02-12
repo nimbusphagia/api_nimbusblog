@@ -30,6 +30,13 @@ userRouter.patch(
   validate,
   userController.update
 )
+// UPdate user role
+userRouter.patch(
+  '/:userId/role',
+  idValidator,
+  validate,
+  userController.updateRole
+)
 
 // Delete user by id
 userRouter.delete('/:userId', idValidator, validate, userController.deleteById);
