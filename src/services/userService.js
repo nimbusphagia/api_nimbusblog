@@ -1,6 +1,8 @@
 import models from '../models/index.js'
 import { hash } from '../lib/utils.js';
+import { UserRole } from '@prisma/client';
 
+const userRoles = Object.values(UserRole);
 
 async function create({ email, name, password }) {
   // Check email is unique
@@ -10,17 +12,10 @@ async function create({ email, name, password }) {
   // Hash password
   const hashedPassword = await hash(password);
 
-  // Get default role
-  const role = await models.role.find('VIEWER');
-  if (!role) {
-    const newRole = await models.role.create('VIEWER');
-  }
-  const roleId = role ? role.id : newRole.id;
-
-  return await models.user.create({ email, name, password: hashedPassword, roleId });
+  return await models.user.create({ email, name, password: hashedPassword });
 }
 async function showById(id) {
-  // Superficial get
+  // Gets user without sensitive fields
   const user = await models.user.showById(id);
   if (!user) {
     throw new Error('USER_NOT_FOUND');
@@ -50,19 +45,25 @@ async function update(id, input) {
   if (!user) throw new Error('USER_NOT_FOUND');
 
   const newData = {};
-  if (name) newData.name = name;
-  if (email) newData.email = email;
-  if (password) newData.password = await hash(password);
+  if (name !== undefined) newData.name = name;
+  if (email !== undefined) {
+    const existing = await models.user.findByEmail(email);
+    if (existing && existing.id !== id) {
+      throw new Error('EMAIL_UNAVAILABLE');
+    }
+    newData.email = email;
+  }
+  if (password !== undefined) newData.password = await hash(password);
   if (Object.keys(newData).length === 0) throw new Error('NO_FIELDS_TO_UPDATE');
-  const updatedUser = await models.user.update(id, newData);
+  const updatedUser = await models.user.update({ id, data: newData });
   return updatedUser;
 }
-async function updateRole(id) {
+// To isolate the update role logic
+async function updateRole({ id, role }) {
   const user = await models.user.findById(id);
-  if (user.role.name !== 'VIEWER') throw new Error('INVALID_UPGRADE');
-  const authorRole = await models.role.find('AUTHOR');
-  if (!authorRole) await models.role.create('AUTHOR');
-  return await models.user.updateRole(id);
+  if (!user) throw new Error('USER_NOT_FOUND');
+  if (!userRoles.includes(role)) throw new Error('INVALID_ROLE');
+  return await models.user.update({ id, role });
 }
 async function deleteById(id) {
   const user = await models.user.findById(id);

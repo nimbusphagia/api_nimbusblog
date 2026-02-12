@@ -15,7 +15,7 @@ async function create({ authorId }) {
   // Verify author 
   const author = await models.user.findById(authorId);
   if (!author) throw new Error('AUTHOR_NOT_FOUND');
-  if (author.role.name !== 'author') throw new Error('INVALID_CREDENTIALS');
+  if (author.role !== 'AUTHOR') throw new Error('INVALID_CREDENTIALS');
 
   // Set data (only authorId to initialize it)
   const data = {
@@ -28,7 +28,7 @@ async function getByAuthor(authorId) {
   // Verify author 
   const author = await models.user.findById(authorId);
   if (!author) throw new Error('AUTHOR_NOT_FOUND');
-  if (author.role.name !== 'AUTHOR') throw new Error('INVALID_CREDENTIALS');
+  if (author.role !== 'AUTHOR') throw new Error('INVALID_CREDENTIALS');
 
   const entries = await models.entry.findAll({ authorId });
   return entries;

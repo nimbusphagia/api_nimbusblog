@@ -3,7 +3,6 @@ import userService from "../services/userService.js";
 async function getOne(req, res, next) {
   try {
     const { userId } = req.params;
-    console.log(userId);
     const user = await userService.getById(userId);
     res.status(200).json(user);
   } catch (error) {
@@ -42,7 +41,8 @@ async function update(req, res, next) {
 async function updateRole(req, res, next) {
   try {
     const { userId } = req.params;
-    const updatedUser = await userService.updateRole(userId);
+    const { role } = req.body;
+    const updatedUser = await userService.updateRole({ id: userId, role });
     res.status(200).json(updatedUser);
   } catch (error) {
     next(error);

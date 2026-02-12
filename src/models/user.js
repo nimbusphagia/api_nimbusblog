@@ -1,4 +1,10 @@
 import { prisma } from '../prismaClient.js';
+const publicUserSelect = {
+  id: true,
+  name: true,
+  email: true,
+  role: true
+};
 
 async function create(data) {
   return await prisma.user.create({
@@ -6,22 +12,17 @@ async function create(data) {
   });
 }
 async function findAll() {
-  return await prisma.user.findMany();
+  return await prisma.user.findMany({
+    select: publicUserSelect,
+  });
 }
 async function showById(id) {
   // Superficial find 
-  return await prisma.user.findFirst({
+  return await prisma.user.findUnique({
     where: {
       id,
     },
-    select: {
-      name: true,
-      role: {
-        select: {
-          name: true,
-        }
-      },
-    }
+    select: publicUserSelect,
   });
 }
 async function findById(id) {
@@ -29,15 +30,9 @@ async function findById(id) {
     where: {
       id,
     },
-    include: {
-      role: {
-        select: {
-          name: true
-        }
-      }
-    }
   });
 }
+// To check email is unique and login
 async function findByEmail(email) {
   return await prisma.user.findUnique({
     where: {
@@ -46,7 +41,7 @@ async function findByEmail(email) {
   });
 }
 
-async function update(id, data) {
+async function update({ id, data }) {
   return await prisma.user.update({
     where: {
       id,
@@ -59,21 +54,6 @@ async function deleteById(id) {
     where: { id }
   })
 }
-async function updateRole(id) {
-  return await prisma.$transaction(async (tx) => {
-
-    const authorRole = await tx.role.findUnique({
-      where: { name: 'AUTHOR' }
-    });
-    const updatedUser = await tx.user.update({
-      where: { id },
-      data: {
-        roleId: authorRole.id
-      }
-    });
-    return updatedUser;
-  });
-}
 
 
-export default { create, findAll, findById, showById, findByEmail, update, updateRole, deleteById };
+export default { create, findAll, findById, showById, findByEmail, update, deleteById };
