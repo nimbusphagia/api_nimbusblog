@@ -48,5 +48,16 @@ async function updateRole(req, res, next) {
     next(error);
   }
 }
-export default { create, update, updateRole, getOne, getAll };
+async function deleteById(req, res, next) {
+  try {
+    const { userId } = req.params;
+    await userService.deleteById(userId);
+    res.status(200).json({
+      'message': 'User deleted succesfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+export default { create, update, updateRole, getOne, getAll, deleteById };
 

@@ -8,7 +8,7 @@ async function create({ email, name, password }) {
   if (existing) throw new Error('EMAIL_UNAVAILABLE');
 
   // Hash password
-  const hash = await hash(password);
+  const hashedPassword = await hash(password);
 
   // Get default role
   const role = await models.role.find('VIEWER');
@@ -17,7 +17,7 @@ async function create({ email, name, password }) {
   }
   const roleId = role ? role.id : newRole.id;
 
-  return await models.user.create({ email, name, password: hash, roleId });
+  return await models.user.create({ email, name, password: hashedPassword, roleId });
 }
 async function showById(id) {
   // Superficial get
@@ -64,4 +64,10 @@ async function updateRole(id) {
   if (!authorRole) await models.role.create('AUTHOR');
   return await models.user.updateRole(id);
 }
-export default { create, getAll, getById, getByEmail, update, updateRole }
+async function deleteById(id) {
+  const user = await models.user.findById(id);
+  if (!user) throw new Error('USER_NOT_FOUND');
+
+  return await models.user.deleteById(id)
+}
+export default { create, getAll, getById, getByEmail, update, updateRole, deleteById }

@@ -4,16 +4,17 @@ import { validate } from "../middleware/validate.js";
 import { idValidator, dataValidator } from "../middleware/userValidator.js";
 
 const userRouter = new Router();
-// GET
+// Get all users
 userRouter.get('/', userController.getAll);
 
+// Get user by id
 userRouter.get(
   '/:userId',
   idValidator,
   validate,
   userController.getOne);
 
-// POST
+// Create user
 userRouter.post(
   '/',
   dataValidator,
@@ -21,7 +22,7 @@ userRouter.post(
   userController.create
 );
 
-// PATCH
+// Update user by id
 userRouter.patch(
   '/:userId',
   idValidator,
@@ -30,6 +31,7 @@ userRouter.patch(
   userController.update
 )
 
-// DELETE
+// Delete user by id
+userRouter.delete('/:userId', idValidator, validate, userController.deleteById);
 
 export default userRouter;

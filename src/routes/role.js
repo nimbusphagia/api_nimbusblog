@@ -4,11 +4,11 @@ import { validate } from "../middleware/validate.js";
 import roleController from "../controllers/roleController.js";
 
 const roleRouter = new Router();
-roleRouter.get(
-  '/',
-  roleController.getAll
-);
 
+// Get all roles
+roleRouter.get('/', roleController.getAll);
+
+// Create a new role
 roleRouter.post(
   '/',
   body('name')

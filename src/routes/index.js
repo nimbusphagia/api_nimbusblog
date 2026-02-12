@@ -4,7 +4,6 @@ import roleRouter from "./role.js";
 import userRouter from "./user.js";
 import authRouter from "./auth.js";
 import entryRouter from "./entry.js";
-import blockRouter from "./block.js";
 
 const router = new Router();
 
