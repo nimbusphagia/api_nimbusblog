@@ -1,7 +1,11 @@
 import { Router } from "express";
 import commentController from "../controllers/commentController.js";
+import commentLikeRouter from "./commentLike.js";
 
 const commentRouter = new Router({ mergeParams: true });
+// Child Router
+commentRouter.use('/likes', commentLikeRouter);
+
 // Get comments by Entry
 commentRouter.get('/', commentController.getByEntry);
 // Create comment in entry
