@@ -39,6 +39,7 @@ model Entry {
   createdAt   DateTime  @default(now())
   publishedAt DateTime?
   likes       Like[]
+  comments    Comment[]
 }
 
 model Block {
@@ -59,6 +60,8 @@ enum BlockType {
 
 model Comment {
   id        String   @id @default(uuid())
+  entry     Entry    @relation(fields: [entryId], references: [id])
+  entryId   String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   text      String

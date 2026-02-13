@@ -1,20 +1,10 @@
 import { prisma } from "../prismaClient.js";
 
-/*
-model Like {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  entry     Entry?   @relation(fields: [entryId], references: [id])
-  entryId   String?
-  comment   Comment? @relation(fields: [commentId], references: [id])
-  commentId String?
-  createdAt DateTime @default(now())
 
-  @@unique([userId, entryId])
-  @@unique([userId, commentId])
-}
-*/
+const publicUser = {
+  name: true,
+  role: true,
+};
 
 async function create(data) {
   /*
@@ -32,12 +22,34 @@ async function findById(id) {
   return await prisma.like.findUnique({
     where: {
       id
+    },
+    include: {
+      publicUser,
     }
   });
 }
-async function findAll() {
-  return await prisma.like.findMany();
+async function findByEntry(entryId) {
+  return await prisma.like.findMany({
+    where: {
+      entryId,
+    },
+    include: {
+      publicUser,
+    }
+
+  });
 }
+async function findByComment(commentId) {
+  return await prisma.like.findMany({
+    where: {
+      commentId,
+    },
+    include: {
+      publicUser,
+    }
+  });
+}
+
 async function deleteById(id) {
   return await prisma.like.delete({
     where: {
@@ -46,4 +58,4 @@ async function deleteById(id) {
   });
 }
 
-export default { create, findById, findAll, deleteById }
+export default { create, findById, findByEntry, findByComment, deleteById }

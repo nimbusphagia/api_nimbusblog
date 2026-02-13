@@ -1,25 +1,13 @@
 import { prisma } from "../prismaClient.js";
 
-/*
-model Comment {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  text      String
-  createdAt DateTime @default(now())
-  likes     Like[]
-}
-*/
 
-async function create(data) {
-  /*
-   data:{
-    userId,
-    text,
-   }
-   */
+async function create({ entryId, userId, text }) {
   return await prisma.comment.create({
-    data,
+    data: {
+      entryId,
+      userId,
+      text,
+    }
   })
 }
 async function findById(id) {
@@ -29,20 +17,21 @@ async function findById(id) {
     }
   });
 }
-async function findAll() {
-  return await prisma.comment.findMany();
+async function findAll(data = {}) {
+  return await prisma.comment.findMany({
+    where: {
+      data,
+    }
+  });
 }
-async function update(id, data) {
-  /*
-   data:{
-    text,
-   }
-   */
-  return await prisma.block.update({
+async function update({ id, text }) {
+  return await prisma.comment.update({
     where: {
       id: id,
     },
-    data,
+    data: {
+      text,
+    },
   });
 }
 async function deleteById(id) {

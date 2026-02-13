@@ -2,8 +2,12 @@ import { Router } from "express";
 import userController from "../controllers/userController.js";
 import { validate } from "../middleware/validate.js";
 import { idValidator, dataValidator } from "../middleware/userValidator.js";
+import commentController from "../controllers/commentController.js";
 
 const userRouter = new Router();
+// Get comments by user
+userRouter.get('/comments', commentController.getByUser);
+
 // Get all users
 userRouter.get('/', userController.getAll);
 
@@ -30,7 +34,7 @@ userRouter.patch(
   validate,
   userController.update
 )
-// UPdate user role
+// Update user role
 userRouter.patch(
   '/:userId/role',
   idValidator,

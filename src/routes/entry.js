@@ -1,11 +1,13 @@
 import { Router } from "express";
 import entryController from "../controllers/entryController.js";
 import blockRouter from "./block.js";
+import commentRouter from "./comment.js";
 
 const entryRouter = new Router({ mergeParams: true });
 
-// Child Blocks Router
+// Child Router
 entryRouter.use('/:entryId/blocks', blockRouter);
+entryRouter.use('/:entryId/comments', commentRouter)
 // Get entries by author
 entryRouter.get('/', entryController.getByAuthor);
 // Create empty entry
