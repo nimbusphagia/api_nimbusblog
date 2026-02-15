@@ -1,14 +1,5 @@
 import models from "../models/index.js";
-/*
-model Comment {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  text      String
-  createdAt DateTime @default(now())
-  likes     Like[]
-}
-*/
+
 async function create({ entryId, userId, text }) {
   // Verify user 
   const user = await models.user.findById(userId);

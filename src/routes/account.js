@@ -1,24 +1,17 @@
 import { Router } from "express";
+import accountCommentRouter from "./accountComment.js";
+import accountEntryRouter from "./accountEntry.js";
 
 const accountRouter = new Router();
 
 // All users 
-
 accountRouter.get('/');
 accountRouter.patch('/');
 accountRouter.delete('/');
 
-accountRouter.get('/comments');
-accountRouter.get('/comments/:commentId');
-accountRouter.post('/comments');
-accountRouter.patch('/comments/:commentId');
-accountRouter.delete('/comments/:commentId');
+accountRouter.use('/comments', accountCommentRouter);
 
 // Author only
-accountRouter.get('/entries');
-accountRouter.get('/entries/:entryId');
-accountRouter.post('/entries');
-accountRouter.patch('/entries/:entryId');
-accountRouter.delete('/entries/:entryId');
+accountRouter.use('/entries', accountEntryRouter);
 
 export default accountRouter;

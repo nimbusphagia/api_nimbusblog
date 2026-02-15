@@ -1,18 +1,5 @@
 import { prisma } from "../prismaClient.js";
 
-/*
- model Entry {
-  id          String    @id @default(uuid())
-  title       String
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    String
-  blocks      Block[]
-  createdAt   DateTime  @default(now())
-  publishedAt DateTime?
-  likes       Like[]
-}
- */
-
 async function create(data) {
   return await prisma.entry.create({
     data,

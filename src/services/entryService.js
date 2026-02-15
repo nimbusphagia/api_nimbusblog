@@ -1,21 +1,11 @@
 import models from "../models/index.js";
-/*
- model Entry {
-  id          String    @id @default(uuid())
-  title       String
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    String
-  blocks      Block[]
-  createdAt   DateTime  @default(now())
-  publishedAt DateTime?
-  likes       Like[]
-}
- */
-async function create({ authorId }) {
+
+async function create({ authorId, currentUser }) {
+  if (currentUser.id !== authorId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   // Verify author 
   const author = await models.user.findById(authorId);
-  if (!author) throw new Error('AUTHOR_NOT_FOUND');
-  if (author.role !== 'AUTHOR') throw new Error('INVALID_CREDENTIALS');
+  if (!author) throw new Error('USER_NOT_FOUND');
+  if (author.role !== 'AUTHOR') throw new Error('AUTHOR_NOT_FOUND');
 
   // Set data (only authorId to initialize it)
   const data = {
@@ -27,8 +17,8 @@ async function create({ authorId }) {
 async function getByAuthor(authorId) {
   // Verify author 
   const author = await models.user.findById(authorId);
-  if (!author) throw new Error('AUTHOR_NOT_FOUND');
-  if (author.role !== 'AUTHOR') throw new Error('INVALID_CREDENTIALS');
+  if (!author) throw new Error('USER_NOT_FOUND');
+  if (author.role !== 'AUTHOR') throw new Error('AUTHOR_NOT_FOUND');
 
   const entries = await models.entry.findAll({ authorId });
   return entries;
@@ -42,23 +32,16 @@ async function getById(id) {
 }
 
 async function getAll() {
+  if (currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   const entries = await models.entry.findAll();
   return entries;
 }
 
-async function update(id, input) {
-  const { title, blocks } = input;
-
-  if (blocks !== undefined && !Array.isArray(blocks)) {
-    throw new Error('INVALID_BLOCK_ARRAY');
-  }
+async function update({ id, title, currentUser }) {
+  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
-
-  if (Array.isArray(blocks) && blocks.length > 0) {
-    await models.entry.updateBlocks(id, blocks);
-  }
 
   const data = {};
   if (title !== undefined) data.title = title;
@@ -67,14 +50,22 @@ async function update(id, input) {
 }
 
 
-async function deleteById(id) {
+async function deleteById({ id, currentUser }) {
+  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
+
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
 
   return await models.entry.deleteById(id);
 }
-async function publish(id) {
-  return await models.entry.update(id, { publishedAt: new Date() })
+async function publish({ id, currentUser }) {
+  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
+
+  const entry = await models.entry.findById(id);
+  if (!entry) throw new Error('ENTRY_NOT_FOUND');
+
+  if (entry.title !== undefined || entry.blocks)
+    return await models.entry.update(id, { publishedAt: new Date() })
 }
 
 export default { create, getAll, getById, getByAuthor, update, deleteById, publish }

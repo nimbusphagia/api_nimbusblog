@@ -10,13 +10,14 @@ const entryRouter = new Router({ mergeParams: true });
 entryRouter.use('/:entryId/blocks', blockRouter);
 entryRouter.use('/:entryId/comments', commentRouter);
 entryRouter.use('/:entryId/likes', entryLikeRouter);
+
 // Get entries by author
 entryRouter.get('/', entryController.getByAuthor);
 // Create empty entry
 entryRouter.post('/', entryController.create);
-// Update controller by id
+// Update entry by id
 entryRouter.patch('/:entryId', entryController.update);
-// Delete controller by id
+// Delete entry by id
 entryRouter.delete('/:entryId', entryController.deleteById);
 
 export default entryRouter;

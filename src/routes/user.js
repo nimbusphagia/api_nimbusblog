@@ -18,14 +18,6 @@ userRouter.get(
   validate,
   userController.getOne);
 
-// Create user
-userRouter.post(
-  '/',
-  dataValidator,
-  validate,
-  userController.create
-);
-
 // Update user by id
 userRouter.patch(
   '/:userId',

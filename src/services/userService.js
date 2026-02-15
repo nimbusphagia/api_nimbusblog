@@ -22,12 +22,14 @@ async function showById(id) {
   }
   return user;
 }
-async function getById(id) {
+async function getById({ id, currentUser }) {
+  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   const user = await models.user.findById(id);
   if (!user) throw new Error('USER_NOT_FOUND');
 
   return user;
 }
+// Only for login
 async function getByEmail(email) {
   const user = await models.user.findByEmail(email);
   if (!user) {
@@ -35,11 +37,14 @@ async function getByEmail(email) {
   }
   return user;
 }
-async function getAll() {
+async function getAll({ currentUser }) {
+  console.log(currentUser);
+  if (currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   const users = await models.user.findAll();
   return users;
 }
-async function update(id, input) {
+async function update({ id, input, currentUser }) {
+  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   const { name, email, password } = input;
   const user = await models.user.findById(id);
   if (!user) throw new Error('USER_NOT_FOUND');
@@ -59,13 +64,15 @@ async function update(id, input) {
   return updatedUser;
 }
 // To isolate the update role logic
-async function updateRole({ id, role }) {
+async function updateRole({ id, role, currentUser }) {
+  if (currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   const user = await models.user.findById(id);
   if (!user) throw new Error('USER_NOT_FOUND');
   if (!userRoles.includes(role)) throw new Error('INVALID_ROLE');
   return await models.user.update({ id, data: { role: role } });
 }
-async function deleteById(id) {
+async function deleteById({ id, currentUser }) {
+  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   const user = await models.user.findById(id);
   if (!user) throw new Error('USER_NOT_FOUND');
 

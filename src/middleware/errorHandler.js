@@ -46,6 +46,10 @@ export function errorHandler(err, req, res, next) {
       status: 400,
       message: "Entry blocks must be wrapped in an array",
     },
+    ACCESS_DENIED: {
+      status: 403,
+      message: "This content is protected",
+    }
   };
 
   const error = errorMap[err.message];
