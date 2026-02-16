@@ -1,21 +1,8 @@
 import models from "../models/index.js";
-/*
-model Like {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  entry     Entry?   @relation(fields: [entryId], references: [id])
-  entryId   String?
-  comment   Comment? @relation(fields: [commentId], references: [id])
-  commentId String?
-  createdAt DateTime @default(now())
 
-  @@unique([userId, entryId])
-  @@unique([userId, commentId])
-}
-*/
+async function createOnEntry({ entryId, userId, currentUser }) {
+  if (currentUser.id !== userId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
-async function createOnEntry({ entryId, userId }) {
   // Verify user 
   const user = await models.user.findById(userId);
   if (!user) throw new Error('USER_NOT_FOUND');
@@ -25,7 +12,10 @@ async function createOnEntry({ entryId, userId }) {
 
   return await models.like.create({ userId, entryId });
 }
-async function createOnComment({ commentId, userId }) {
+
+async function createOnComment({ commentId, userId, currentUser }) {
+  if (currentUser.id !== userId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
+
   // Verify user 
   const user = await models.user.findById(userId);
   if (!user) throw new Error('USER_NOT_FOUND');
@@ -58,9 +48,11 @@ async function getById(id) {
   return like;
 }
 
-async function deleteById(id) {
+async function deleteById({ id, currentUser }) {
   const like = await models.like.findById(id);
   if (!like) throw new Error('LIKE_NOT_FOUND');
+
+  if (currentUser.id !== like.userId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
   return await models.like.deleteById(id);
 }

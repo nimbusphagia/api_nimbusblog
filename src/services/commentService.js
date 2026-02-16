@@ -1,8 +1,9 @@
 import models from "../models/index.js";
 
-async function create({ entryId, userId, text, currentUser }) {
-  if (currentUser.id !== userId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
+async function create({ entryId, text, currentUser }) {
+  if (!currentUser.id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
+  const userId = currentUser.id;
   // Verify user 
   const user = await models.user.findById(userId);
   if (!user) throw new Error('USER_NOT_FOUND');
@@ -16,7 +17,7 @@ async function create({ entryId, userId, text, currentUser }) {
   return await models.comment.create({ entryId, userId, text });
 }
 
-async function getByUser({ userId }) {
+async function getByUser(userId) {
 
   // Verify user 
   const user = await models.user.findById(userId);
@@ -26,7 +27,9 @@ async function getByUser({ userId }) {
   return comments;
 }
 async function getByEntry(entryId) {
-  // Verify entry const entry = await models.entry.findById(entryId); if (!entry) throw new Error('ENTRY_NOT_FOUND');
+  // Verify entry 
+  const entry = await models.entry.findById(entryId);
+  if (!entry) throw new Error('ENTRY_NOT_FOUND');
 
   const comments = await models.comment.findAll({ entryId });
   return comments;

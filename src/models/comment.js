@@ -17,11 +17,9 @@ async function findById(id) {
     }
   });
 }
-async function findAll(data = {}) {
+async function findAll(where = {}) {
   return await prisma.comment.findMany({
-    where: {
-      data,
-    }
+    where,
   });
 }
 async function update({ id, text }) {

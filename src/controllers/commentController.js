@@ -6,9 +6,9 @@ async function create(req, res, next) {
       id: req.user.id,
       role: req.user.role,
     }
-    const { userId, entryId } = req.params;
+    const { entryId } = req.params;
     const { text } = req.body;
-    const newComment = await commentService.create({ entryId, userId, text, currentUser });
+    const newComment = await commentService.create({ entryId, text, currentUser });
     res.status(201).json(newComment);
   } catch (error) {
     next(error);

@@ -38,7 +38,6 @@ async function getByEmail(email) {
   return user;
 }
 async function getAll({ currentUser }) {
-  console.log(currentUser);
   if (currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
   const users = await models.user.findAll();
   return users;
@@ -73,6 +72,7 @@ async function updateRole({ id, role, currentUser }) {
 }
 async function deleteById({ id, currentUser }) {
   if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
+
   const user = await models.user.findById(id);
   if (!user) throw new Error('USER_NOT_FOUND');
 
