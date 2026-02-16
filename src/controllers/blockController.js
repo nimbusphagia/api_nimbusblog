@@ -2,9 +2,13 @@ import blockService from "../services/blockService.js";
 
 async function create(req, res, next) {
   try {
+    const currentUser = {
+      id: req.user.id,
+      role: req.user.role,
+    };
     const { entryId } = req.params;
     const { blockType } = req.body;
-    const newBlock = await blockService.create({ entryId, blockType });
+    const newBlock = await blockService.create({ entryId, blockType, currentUser });
     res.status(201).json(newBlock);
   } catch (error) {
     next(error);
@@ -32,9 +36,13 @@ async function getById(req, res, next) {
 
 async function update(req, res, next) {
   try {
+    const currentUser = {
+      id: req.user.id,
+      role: req.user.role,
+    };
     const { blockId } = req.params;
     const { blockType, text, mediaSrc } = req.body;
-    const updatedBlock = await blockService.update(blockId, { blockType, text, mediaSrc });
+    const updatedBlock = await blockService.update({ id: blockId, input: { blockType, text, mediaSrc }, currentUser });
     res.status(200).json(updatedBlock);
   } catch (error) {
     next(error);
@@ -42,8 +50,12 @@ async function update(req, res, next) {
 }
 async function deleteById(req, res, next) {
   try {
+    const currentUser = {
+      id: req.user.id,
+      role: req.user.role,
+    };
     const { blockId } = req.params;
-    await blockService.deleteById(blockId);
+    await blockService.deleteById({ id: blockId, currentUser });
     res.status(200).json({ message: "Deleted successfully" });
   } catch (error) {
     next(error);
