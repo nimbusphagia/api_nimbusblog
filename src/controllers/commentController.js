@@ -2,9 +2,13 @@ import commentService from "../services/commentService.js";
 
 async function create(req, res, next) {
   try {
+    const currentUser = {
+      id: req.user.id,
+      role: req.user.role,
+    }
     const { userId, entryId } = req.params;
     const { text } = req.body;
-    const newComment = await commentService.create({ entryId, userId, text });
+    const newComment = await commentService.create({ entryId, userId, text, currentUser });
     res.status(201).json(newComment);
   } catch (error) {
     next(error);
@@ -40,9 +44,13 @@ async function getById(req, res, next) {
 
 async function update(req, res, next) {
   try {
+    const currentUser = {
+      id: req.user.id,
+      role: req.user.role,
+    }
     const { commentId } = req.params;
     const { text } = req.body;
-    const updatedComment = await commentService.update(commentId, text);
+    const updatedComment = await commentService.update({ id: commentId, text, currentUser });
     res.status(200).json(updatedComment);
   } catch (error) {
     next(error);
@@ -50,8 +58,12 @@ async function update(req, res, next) {
 }
 async function deleteById(req, res, next) {
   try {
+    const currentUser = {
+      id: req.user.id,
+      role: req.user.role,
+    }
     const { commentId } = req.params;
-    await commentService.deleteById(commentId);
+    await commentService.deleteById({ id: commentId, currentUser });
     res.status(204);
   } catch (error) {
     next(error);
