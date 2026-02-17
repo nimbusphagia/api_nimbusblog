@@ -14,6 +14,10 @@ export function errorHandler(err, req, res, next) {
       status: 404,
       message: "User not found",
     },
+    AUTHOR_NOT_FOUND: {
+      status: 404,
+      message: "Author not found",
+    },
     BLOCK_NOT_FOUND: {
       status: 404,
       message: "Block not found",
@@ -30,6 +34,10 @@ export function errorHandler(err, req, res, next) {
       status: 404,
       message: "Like not found",
     },
+    LIKE_ALREADY_EXISTS: {
+      status: 400,
+      message: "A like must be a unique combination of user and object(comment or entry)"
+    },
     NO_FIELDS_TO_UPDATE: {
       status: 400,
       message: "No fields provided to update",
@@ -45,6 +53,14 @@ export function errorHandler(err, req, res, next) {
     INVALID_BLOCK_ARRAY: {
       status: 400,
       message: "Entry blocks must be wrapped in an array",
+    },
+    INVALID_COMMENT: {
+      status: 400,
+      message: "Comments can't be empty",
+    },
+    INVALID_ROLE: {
+      status: 400,
+      message: "Roles can only be 'VIEWER', 'AUTHOR' , 'ADMIN' ",
     },
     ACCESS_DENIED: {
       status: 403,

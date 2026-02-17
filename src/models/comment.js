@@ -1,6 +1,5 @@
 import { prisma } from "../prismaClient.js";
 
-
 async function create({ entryId, userId, text }) {
   return await prisma.comment.create({
     data: {

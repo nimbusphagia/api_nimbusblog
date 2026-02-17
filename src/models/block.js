@@ -1,15 +1,7 @@
 import { prisma } from "../prismaClient.js";
 
 async function create(data) {
-  /*
-   data:{
-    entryId,
-    blockType,
-    index,
-    text,
-    mediaSrc
-   }
-   */
+
   return await prisma.block.create({
     data,
   })
@@ -25,14 +17,7 @@ async function findAll(where = {}) {
   return await prisma.block.findMany({ where });
 }
 async function update(id, data) {
-  /*
-   data:{
-    blockType,
-    index,
-    text,
-    mediaSrc
-   }
-   */
+
   return await prisma.block.update({
     where: {
       id: id,

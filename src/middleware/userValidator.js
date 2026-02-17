@@ -1,5 +1,5 @@
 import { body, param } from "express-validator"
-export const dataValidator = [
+export const signupValidator = [
   body('name')
     .trim()
     .notEmpty()
@@ -25,7 +25,7 @@ export const idValidator = [
   param("userId").isUUID().withMessage("INVALID_USER_ID"),
 ];
 
-export const userValidator = [
+export const loginValidator = [
   body('email')
     .trim()
     .notEmpty()

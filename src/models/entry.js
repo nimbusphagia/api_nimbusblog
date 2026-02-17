@@ -17,16 +17,11 @@ async function findAll(where = {}) {
     where,
     include: {
       blocks: true,
+      likes: true,
     }
   });
 }
 async function update(id, data) {
-  /*
-   data:{
-    title,
-    publishedAt,
-   }
-   */
   return await prisma.entry.update({
     where: {
       id: id,
