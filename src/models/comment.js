@@ -20,6 +20,9 @@ async function findById(id) {
 async function findAll(where = {}) {
   return await prisma.comment.findMany({
     where,
+    include: {
+      likes: true,
+    }
   });
 }
 async function update({ id, text }) {

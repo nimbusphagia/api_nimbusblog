@@ -2,18 +2,14 @@ import { prisma } from "../prismaClient.js";
 
 
 const publicUser = {
-  name: true,
-  role: true,
+  select:
+  {
+    name: true,
+    role: true,
+  }
 };
 
 async function create(data) {
-  /*
-   data:{
-    userId,
-    entryId,
-    commentId,
-   }
-   */
   return await prisma.like.create({
     data,
   })
@@ -24,7 +20,7 @@ async function findById(id) {
       id
     },
     include: {
-      publicUser,
+      user: publicUser
     }
   });
 }
@@ -34,7 +30,7 @@ async function findByEntry(entryId) {
       entryId,
     },
     include: {
-      publicUser,
+      user: publicUser,
     }
 
   });
@@ -45,11 +41,15 @@ async function findByComment(commentId) {
       commentId,
     },
     include: {
-      publicUser,
+      user: publicUser,
     }
   });
 }
-
+async function findUnique(where = {}) {
+  return await prisma.like.findUnique({
+    where,
+  })
+}
 async function deleteById(id) {
   return await prisma.like.delete({
     where: {
@@ -58,4 +58,4 @@ async function deleteById(id) {
   });
 }
 
-export default { create, findById, findByEntry, findByComment, deleteById }
+export default { create, findById, findUnique, findByEntry, findByComment, deleteById }
