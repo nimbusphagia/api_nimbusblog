@@ -1,7 +1,9 @@
 import models from "../models/index.js";
 
-async function createOnEntry({ entryId, userId, currentUser }) {
-  if (currentUser.id !== userId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
+async function createOnEntry({ entryId, currentUser }) {
+  if (!currentUser.id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
+
+  const userId = currentUser.id;
 
   // Verify user 
   const user = await models.user.findById(userId);
@@ -10,6 +12,10 @@ async function createOnEntry({ entryId, userId, currentUser }) {
   const entry = await models.entry.findById(entryId);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
 
+  //Verify Like doesnt exist yet
+  const exists = await models.like.findUnique({ userId_entryId: { userId, entryId } });
+  if (exists) throw new Error('LIKE_ALREADY_EXISTS');
+
   return await models.like.create({ userId, entryId });
 }
 
@@ -17,7 +23,7 @@ async function createOnComment({ commentId, currentUser }) {
   if (!currentUser.id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
   const userId = currentUser.id;
-  //Verify Like doesnt exist yet
+
 
   // Verify user 
   const user = await models.user.findById(userId);
@@ -26,6 +32,7 @@ async function createOnComment({ commentId, currentUser }) {
   const comment = await models.comment.findById(commentId);
   if (!comment) throw new Error('COMMENT_NOT_FOUND');
 
+  //Verify Like doesnt exist yet
   const exists = await models.like.findUnique({ userId_commentId: { userId, commentId } });
   if (exists) throw new Error('LIKE_ALREADY_EXISTS');
 

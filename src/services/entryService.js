@@ -38,10 +38,10 @@ async function getAll() {
 }
 
 async function update({ id, title, currentUser }) {
-  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
-
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
+
+  if (currentUser.id !== entry.authorId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
   const data = {};
   if (title !== undefined) data.title = title;
@@ -51,18 +51,19 @@ async function update({ id, title, currentUser }) {
 
 
 async function deleteById({ id, currentUser }) {
-  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
-
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
+
+  if (currentUser.id !== entry.authorId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
   return await models.entry.deleteById(id);
 }
 async function publish({ id, currentUser }) {
-  if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
+
+  if (currentUser.id !== entry.authorId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
 
   if (entry.title !== undefined || entry.blocks)
     return await models.entry.update(id, { publishedAt: new Date() })
