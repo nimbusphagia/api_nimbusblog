@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import models from '../models/index.js'
 import bcrypt from 'bcrypt'
-const { sign, verify, decode } = jwt;
+const { sign } = jwt;
 
 async function login(email, password) {
   const user = await models.user.findByEmail(email);
@@ -15,7 +15,7 @@ async function login(email, password) {
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
-  return { token, user };
+  return { accessToken: token };
 }
 
 export default { login }
