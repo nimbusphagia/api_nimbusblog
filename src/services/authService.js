@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import models from '../models/index.js'
 import bcrypt from 'bcrypt'
-const { sign } = jwt;
+const { sign, verify } = jwt;
 
 async function login(email, password) {
   const user = await models.user.findByEmail(email);

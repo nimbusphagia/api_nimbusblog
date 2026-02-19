@@ -18,6 +18,7 @@ router.use('/auth', authRouter);
 // JWT
 router.use(passport.authenticate("jwt", { session: false }));
 
+router.get('/me', userController.getMe);
 router.use('/users', userRouter);
 router.use('/users/:userId/entries', entryRouter); // Nested inside is blocks Router
 

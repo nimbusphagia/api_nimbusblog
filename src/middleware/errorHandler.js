@@ -62,6 +62,10 @@ export function errorHandler(err, req, res, next) {
       status: 400,
       message: "Roles can only be 'VIEWER', 'AUTHOR' , 'ADMIN' ",
     },
+    INVALID_TOKEN: {
+      status: 401,
+      message: "Invalid jwt token",
+    },
     ACCESS_DENIED: {
       status: 403,
       message: "This content is protected",

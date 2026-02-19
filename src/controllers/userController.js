@@ -1,4 +1,16 @@
 import userService from "../services/userService.js";
+async function getMe(req, res) {
+  try {
+    return res.json({
+      id: req.user.id,
+      email: req.user.email,
+      role: req.user.role,
+    });
+
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+}
 
 async function getOne(req, res, next) {
   try {
@@ -71,5 +83,5 @@ async function deleteById(req, res, next) {
     next(error);
   }
 }
-export default { create, update, updateRole, getOne, getAll, deleteById };
+export default { getMe, create, update, updateRole, getOne, getAll, deleteById };
 
