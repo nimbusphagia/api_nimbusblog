@@ -5,7 +5,7 @@ async function create({ authorId, currentUser }) {
   // Verify author 
   const author = await models.user.findById(authorId);
   if (!author) throw new Error('USER_NOT_FOUND');
-  if (author.role !== 'AUTHOR') throw new Error('AUTHOR_NOT_FOUND');
+  if (author.role !== 'AUTHOR' && author.role !== 'ADMIN') throw new Error('AUTHOR_NOT_FOUND');
 
   // Set data (only authorId to initialize it)
   const data = {

@@ -32,7 +32,7 @@ enum UserRole {
 
 model Entry {
   id          String    @id @default(uuid())
-  title       String?
+  title       String    @default("New Blog Entry")
   author      User      @relation(fields: [authorId], references: [id])
   authorId    String
   blocks      Block[]
