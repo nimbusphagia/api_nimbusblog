@@ -13,6 +13,8 @@ entryRouter.use('/:entryId/likes', entryLikeRouter);
 
 // Get entries by author
 entryRouter.get('/', entryController.getByAuthor);
+// Get entry by id
+entryRouter.get('/:entryId', entryController.getById);
 // Create empty entry
 entryRouter.post('/', entryController.create);
 // Update entry by id

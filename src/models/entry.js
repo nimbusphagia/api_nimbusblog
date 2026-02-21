@@ -16,8 +16,12 @@ async function findAll(where = {}) {
   return await prisma.entry.findMany({
     where,
     include: {
-      blocks: true,
-      likes: true,
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
     }
   });
 }

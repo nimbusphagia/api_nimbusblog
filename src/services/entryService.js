@@ -18,7 +18,7 @@ async function getByAuthor(authorId) {
   // Verify author 
   const author = await models.user.findById(authorId);
   if (!author) throw new Error('USER_NOT_FOUND');
-  if (author.role !== 'AUTHOR') throw new Error('AUTHOR_NOT_FOUND');
+  if (author.role !== 'AUTHOR' && author.role !== 'ADMIN') throw new Error('AUTHOR_NOT_FOUND');
 
   const entries = await models.entry.findAll({ authorId });
   return entries;
