@@ -7,8 +7,8 @@ async function create(req, res, next) {
       role: req.user.role,
     };
     const { entryId } = req.params;
-    const { blockType } = req.body;
-    const newBlock = await blockService.create({ entryId, blockType, currentUser });
+    const { index, blockType } = req.body;
+    const newBlock = await blockService.create({ entryId, blockType, index, currentUser });
     res.status(201).json(newBlock);
   } catch (error) {
     next(error);

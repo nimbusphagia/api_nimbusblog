@@ -2,7 +2,7 @@ import models from "../models/index.js";
 
 const validTypes = ['TEXT', 'IMAGE', 'HEADING'];
 
-async function create({ entryId, blockType, currentUser }) {
+async function create({ entryId, blockType, index, currentUser }) {
   // Verify entry exists
   const entry = await models.entry.findById(entryId);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
@@ -19,6 +19,7 @@ async function create({ entryId, blockType, currentUser }) {
   const data = {
     entryId,
     blockType,
+    index,
   }
   return await models.block.create(data);
 }

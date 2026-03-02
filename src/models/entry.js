@@ -11,7 +11,11 @@ async function findById(id) {
       id
     },
     include: {
-      blocks: true,
+      blocks: {
+        orderBy: {
+          index: 'asc'
+        }
+      },
     }
   });
 }

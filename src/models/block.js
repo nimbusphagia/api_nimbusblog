@@ -14,7 +14,7 @@ async function findById(id) {
   });
 }
 async function findAll(where = {}) {
-  return await prisma.block.findMany({ where });
+  return await prisma.block.findMany({ where, orderBy: { index: 'asc' } });
 }
 async function update(id, data) {
 
