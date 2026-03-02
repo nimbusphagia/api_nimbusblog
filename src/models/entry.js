@@ -9,6 +9,9 @@ async function findById(id) {
   return await prisma.entry.findUnique({
     where: {
       id
+    },
+    include: {
+      blocks: true,
     }
   });
 }

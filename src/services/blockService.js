@@ -59,6 +59,7 @@ async function update({ id, input, currentUser }) {
   if (!block) throw new Error('BLOCK_NOT_FOUND');
 
   const effectiveBlockType = blockType ?? block.blockType;
+
   // Validate permission
   const entry = await models.entry.findById(block.entryId);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
@@ -74,7 +75,7 @@ async function update({ id, input, currentUser }) {
     newData.blockType = blockType;
   }
 
-  if (effectiveBlockType === 'TEXT') {
+  if (effectiveBlockType === 'TEXT' || effectiveBlockType === 'HEADING') {
     if (text !== undefined) newData.text = text;
   } else if (effectiveBlockType === 'IMAGE') {
     if (mediaSrc !== undefined) newData.mediaSrc = mediaSrc;
