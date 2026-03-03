@@ -44,7 +44,7 @@ model Entry {
 
 model Block {
   id        String    @id @default(uuid())
-  entry     Entry     @relation(fields: [entryId], references: [id])
+  entry     Entry     @relation(fields: [entryId], references: [id], onDelete: Cascade)
   entryId   String
   blockType BlockType
   index     Int?
