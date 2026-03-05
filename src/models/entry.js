@@ -22,6 +22,9 @@ async function findById(id) {
 async function findAll(where = {}) {
   return await prisma.entry.findMany({
     where,
+    orderBy: {
+      createdAt: 'desc',
+    },
     include: {
       _count: {
         select: {

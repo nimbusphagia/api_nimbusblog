@@ -57,7 +57,7 @@ async function deleteById(req, res, next) {
     };
     const { entryId } = req.params;
     await entryService.deleteById({ id: entryId, currentUser });
-    res.status(204);
+    return res.status(204).end();
   } catch (error) {
     next(error);
   }
