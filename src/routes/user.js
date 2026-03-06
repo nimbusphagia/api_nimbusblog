@@ -1,7 +1,7 @@
 import { Router } from "express";
 import userController from "../controllers/userController.js";
 import { validate } from "../middleware/validate.js";
-import { idValidator, signupValidator } from "../middleware/userValidator.js";
+import { authorInfoValidator, idValidator, signupValidator } from "../middleware/userValidator.js";
 import commentController from "../controllers/commentController.js";
 
 const userRouter = new Router();
@@ -15,7 +15,7 @@ userRouter.get('/', userController.getAll);
 userRouter.get('/:userId', idValidator, validate, userController.getOne);
 
 // Update user by id
-userRouter.patch('/:userId', idValidator, signupValidator, validate, userController.update);
+userRouter.patch('/:userId', authorInfoValidator, validate, userController.update);
 
 // Update user role
 userRouter.patch('/:userId/role', idValidator, validate, userController.updateRole)

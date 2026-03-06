@@ -55,8 +55,19 @@ async function update(req, res, next) {
       role: req.user.role,
     };
     const { userId } = req.params;
-    const { name, email, password } = req.body;
-    const updatedUser = await userService.update({ id: userId, input: { name, email, password }, currentUser });
+    const { name, email, oldPassword, password, imgUrl, description } = req.body;
+    const updatedUser = await userService.update({
+      id: userId,
+      input: {
+        name,
+        email,
+        oldPassword,
+        password,
+        imgUrl,
+        description
+      },
+      currentUser
+    });
     res.status(200).json(updatedUser);
   } catch (error) {
     next(error);

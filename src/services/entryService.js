@@ -23,7 +23,6 @@ async function getByAuthor(authorId) {
   const entries = await models.entry.findAll({ authorId });
   return entries;
 }
-
 async function getById(id) {
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
@@ -37,7 +36,7 @@ async function getAll() {
   return entries;
 }
 
-async function update({ id, title, currentUser }) {
+async function update({ id, title, publishedAt, currentUser }) {
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
 
@@ -45,6 +44,7 @@ async function update({ id, title, currentUser }) {
 
   const data = {};
   if (title !== undefined) data.title = title;
+  if (publishedAt !== undefined) data.publishedAt = publishedAt;
 
   return await models.entry.update(id, data);
 }

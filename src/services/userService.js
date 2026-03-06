@@ -1,5 +1,6 @@
 import models from '../models/index.js'
 import { hash } from '../lib/utils.js';
+import bcrypt from 'bcrypt';
 import { UserRole } from '@prisma/client';
 
 const userRoles = Object.values(UserRole);
@@ -44,21 +45,28 @@ async function getAll({ currentUser }) {
 }
 async function update({ id, input, currentUser }) {
   if (currentUser.id !== id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
-  const { name, email, password } = input;
+  const { name, email, password, oldPassword, imgUrl, description } = input;
   const user = await models.user.findById(id);
   if (!user) throw new Error('USER_NOT_FOUND');
 
+  if (password !== undefined) {
+    if (!oldPassword) throw new Error('OLD_PASSWORD_REQUIRED');
+    const isValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isValid) throw new Error('INVALID_OLD_PASSWORD');
+  }
+
   const newData = {};
   if (name !== undefined) newData.name = name;
+  if (imgUrl !== undefined) newData.imgUrl = imgUrl;
+  if (description !== undefined) newData.description = description;
   if (email !== undefined) {
     const existing = await models.user.findByEmail(email);
-    if (existing && existing.id !== id) {
-      throw new Error('EMAIL_UNAVAILABLE');
-    }
+    if (existing && existing.id !== id) throw new Error('EMAIL_UNAVAILABLE');
     newData.email = email;
   }
   if (password !== undefined) newData.password = await hash(password);
   if (Object.keys(newData).length === 0) throw new Error('NO_FIELDS_TO_UPDATE');
+
   const updatedUser = await models.user.update({ id, data: newData });
   return updatedUser;
 }

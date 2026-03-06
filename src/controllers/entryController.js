@@ -40,10 +40,8 @@ async function update(req, res, next) {
       role: req.user.role,
     };
     const { entryId } = req.params;
-    const { title } = req.body;
-    // Not passing Blocks Array because blocks should be created with an entryId already, 
-    // even when editing, no need to directly move a block to an entry
-    const updatedEntry = await entryService.update({ id: entryId, title, currentUser });
+    const { title, publishedAt } = req.body;
+    const updatedEntry = await entryService.update({ id: entryId, title, currentUser, publishedAt });
     res.status(200).json(updatedEntry);
   } catch (error) {
     next(error);
@@ -61,9 +59,6 @@ async function deleteById(req, res, next) {
   } catch (error) {
     next(error);
   }
-}
-async function reorderBlocks(req, res, next) {
-
 }
 export default { create, update, getByAuthor, deleteById, getById };
 

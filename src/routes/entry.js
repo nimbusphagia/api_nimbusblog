@@ -22,4 +22,5 @@ entryRouter.patch('/:entryId', entryController.update);
 // Delete entry by id
 entryRouter.delete('/:entryId', entryController.deleteById);
 
+
 export default entryRouter;

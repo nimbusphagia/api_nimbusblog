@@ -54,6 +54,10 @@ export function errorHandler(err, req, res, next) {
       status: 400,
       message: "Entry blocks must be wrapped in an array",
     },
+    INVALID_OLD_PASSWORD: {
+      status: 400,
+      message: "Incorrect old password",
+    },
     INVALID_COMMENT: {
       status: 400,
       message: "Comments can't be empty",

@@ -13,15 +13,16 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(uuid())
-  email    String    @unique
-  password String
-  name     String
-  role     UserRole  @default(VIEWER)
-  entries  Entry[]
-  comments Comment[]
-  likes    Like[]
-  imgUrl   String?
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String
+  name        String
+  role        UserRole  @default(VIEWER)
+  entries     Entry[]
+  comments    Comment[]
+  likes       Like[]
+  imgUrl      String?
+  description String?
 }
 
 enum UserRole {
