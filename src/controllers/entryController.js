@@ -16,7 +16,17 @@ async function create(req, res, next) {
 async function getByAuthor(req, res, next) {
   try {
     const { userId } = req.params;
-    const entries = await entryService.getByAuthor(userId);
+    const { filter } = req.query;
+
+    let entries;
+    if (filter === 'mostRecent') {
+      entries = await entryService.getMostRecentPublished({ authorId: userId });
+    } else if (filter === 'mostLiked') {
+      entries = await entryService.getMostLiked({ authorId: userId });
+    } else {
+      entries = await entryService.getByAuthor(userId);
+    }
+
     res.status(200).json(entries);
   } catch (error) {
     next(error);
@@ -60,5 +70,6 @@ async function deleteById(req, res, next) {
     next(error);
   }
 }
+
 export default { create, update, getByAuthor, deleteById, getById };
 

@@ -68,5 +68,15 @@ async function publish({ id, currentUser }) {
   if (entry.title !== undefined || entry.blocks)
     return await models.entry.update(id, { publishedAt: new Date() })
 }
+async function getMostRecentPublished({ authorId }) {
+  const author = await models.user.findById(authorId);
+  if (!author) throw new Error('AUTHOR_NOT_FOUND');
+  return await models.entry.getMostRecentPublished({ authorId });
+}
 
-export default { create, getAll, getById, getByAuthor, update, deleteById, publish }
+async function getMostLiked({ authorId }) {
+  const author = await models.user.findById(authorId);
+  if (!author) throw new Error('AUTHOR_NOT_FOUND');
+  return await models.entry.getMostLiked({ authorId });
+}
+export default { create, getAll, getById, getByAuthor, update, deleteById, publish, getMostRecentPublished, getMostLiked }

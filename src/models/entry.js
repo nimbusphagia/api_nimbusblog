@@ -72,5 +72,29 @@ async function deleteById(id) {
     }
   });
 }
-
-export default { create, findById, findAll, update, updateBlocks, deleteById }
+async function getMostRecentPublished({ authorId }) {
+  return await prisma.entry.findMany({
+    where: {
+      authorId,
+      publishedAt: { not: null },
+    },
+    orderBy: {
+      publishedAt: 'desc',
+    },
+    take: 3,
+  });
+}
+async function getMostLiked({ authorId }) {
+  return await prisma.entry.findMany({
+    where: {
+      authorId,
+      publishedAt: { not: null },
+    },
+    orderBy: {
+      likes: { _count: 'desc' }
+    },
+    take: 3,
+  }
+  );
+}
+export default { create, findById, findAll, update, updateBlocks, deleteById, getMostRecentPublished, getMostLiked }
