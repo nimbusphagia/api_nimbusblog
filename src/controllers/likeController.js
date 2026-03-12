@@ -1,27 +1,28 @@
 import likeService from "../services/likeService.js";
 
-async function createOnEntry(req, res, next) {
+async function toggleOnEntry(req, res, next) {
   try {
     const currentUser = {
       id: req.user.id,
       role: req.user.role,
     };
     const { userId, entryId } = req.params;
-    const newLike = await likeService.createOnEntry({ entryId, userId, currentUser });
+    const newLike = await likeService.toggleOnEntry({ entryId, userId, currentUser });
     res.status(201).json(newLike);
   } catch (error) {
     next(error);
   }
 }
-async function createOnComment(req, res, next) {
+
+async function toggleOnComment(req, res, next) {
   try {
     const currentUser = {
       id: req.user.id,
       role: req.user.role,
     };
     const { userId, commentId } = req.params;
-    const newLike = await likeService.createOnComment({ commentId, userId, currentUser });
-    res.status(201).json(newLike);
+    const { liked } = await likeService.toggleOnComment({ commentId, userId, currentUser });
+    res.status(201).json(liked);
   } catch (error) {
     next(error);
   }
@@ -54,19 +55,5 @@ async function getById(req, res, next) {
   }
 }
 
-async function deleteById(req, res, next) {
-  try {
-    const currentUser = {
-      id: req.user.id,
-      role: req.user.role,
-    };
-    const { likeId } = req.params;
-    await likeService.deleteById({ id: likeId, currentUser });
-    res.status(204);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export default { createOnComment, createOnEntry, getByComment, getByEntry, deleteById, getById };
+export default { toggleOnComment, toggleOnEntry, getByComment, getByEntry, getById };
 

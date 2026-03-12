@@ -25,6 +25,16 @@ async function getOne(req, res, next) {
     next(error);
   }
 }
+async function getById(req, res, next) {
+  try {
+    const { userId } = req.params;
+    const user = await userService.showById(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 async function getAll(req, res, next) {
   try {
@@ -94,5 +104,5 @@ async function deleteById(req, res, next) {
     next(error);
   }
 }
-export default { getMe, create, update, updateRole, getOne, getAll, deleteById };
+export default { getMe, getById, create, update, updateRole, getOne, getAll, deleteById };
 

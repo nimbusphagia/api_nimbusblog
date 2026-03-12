@@ -3,7 +3,9 @@ const publicUserSelect = {
   id: true,
   name: true,
   email: true,
-  role: true
+  role: true,
+  description: true,
+  imgUrl: true,
 };
 
 async function create(data) {

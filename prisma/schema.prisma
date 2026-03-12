@@ -34,7 +34,7 @@ enum UserRole {
 model Entry {
   id          String    @id @default(uuid())
   title       String    @default("New Blog Entry")
-  author      User      @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
   blocks      Block[]
   createdAt   DateTime  @default(now())
@@ -61,9 +61,9 @@ enum BlockType {
 
 model Comment {
   id        String   @id @default(uuid())
-  entry     Entry    @relation(fields: [entryId], references: [id])
+  entry     Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
   entryId   String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   text      String
   createdAt DateTime @default(now())
@@ -72,11 +72,11 @@ model Comment {
 
 model Like {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  entry     Entry?   @relation(fields: [entryId], references: [id])
+  entry     Entry?   @relation(fields: [entryId], references: [id], onDelete: Cascade)
   entryId   String?
-  comment   Comment? @relation(fields: [commentId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?
   createdAt DateTime @default(now())
 

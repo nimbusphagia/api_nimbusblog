@@ -86,4 +86,4 @@ async function deleteById({ id, currentUser }) {
 
   return await models.user.deleteById(id)
 }
-export default { create, getAll, getById, getByEmail, update, updateRole, deleteById }
+export default { create, getAll, showById, getById, getByEmail, update, updateRole, deleteById }

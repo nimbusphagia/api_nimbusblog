@@ -7,10 +7,7 @@ const entryLikeRouter = new Router({ mergeParams: true });
 entryLikeRouter.get('/', likeController.getByEntry);
 
 // Create a like
-entryLikeRouter.post('/', likeController.createOnEntry);
-
-// Remove like
-entryLikeRouter.delete('/:likeId', likeController.deleteById);
+entryLikeRouter.post('/', likeController.toggleOnEntry);
 
 
 export default entryLikeRouter;

@@ -16,8 +16,32 @@ async function findById(id) {
           index: 'asc'
         }
       },
+      author: {
+        select: {
+          name: true,
+          imgUrl: true,
+        }
+      },
+      comments: {
+        orderBy: {
+          createdAt: 'desc'
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              imgUrl: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true
+            }
+          }
+        }
+      }
     }
-  });
+  })
 }
 async function findAll(where = {}) {
   return await prisma.entry.findMany({

@@ -32,7 +32,25 @@ async function getByAuthor(req, res, next) {
     next(error);
   }
 }
+async function getPublishedByAuthor(req, res, next) {
+  try {
+    const { userId } = req.params;
+    const { filter } = req.query;
 
+    let entries;
+    if (filter === 'mostRecent') {
+      entries = await entryService.getMostRecentPublished({ authorId: userId });
+    } else if (filter === 'mostLiked') {
+      entries = await entryService.getMostLiked({ authorId: userId });
+    } else {
+      entries = await entryService.getByAuthorPublished(userId);
+    }
+
+    res.status(200).json(entries);
+  } catch (error) {
+    next(error);
+  }
+}
 async function getById(req, res, next) {
   try {
     const { entryId } = req.params;
@@ -71,5 +89,5 @@ async function deleteById(req, res, next) {
   }
 }
 
-export default { create, update, getByAuthor, deleteById, getById };
+export default { create, update, getByAuthor, getPublishedByAuthor, deleteById, getById };
 

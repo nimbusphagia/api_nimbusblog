@@ -1,42 +1,43 @@
 import models from "../models/index.js";
 
-async function createOnEntry({ entryId, currentUser }) {
+async function toggleOnEntry({ entryId, currentUser }) {
   if (!currentUser.id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
-
   const userId = currentUser.id;
 
-  // Verify user 
   const user = await models.user.findById(userId);
   if (!user) throw new Error('USER_NOT_FOUND');
-  // Verify entry 
+
   const entry = await models.entry.findById(entryId);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
 
-  //Verify Like doesnt exist yet
-  const exists = await models.like.findUnique({ userId_entryId: { userId, entryId } });
-  if (exists) throw new Error('LIKE_ALREADY_EXISTS');
+  const existing = await models.like.findUnique({ userId_entryId: { userId, entryId } });
+  if (existing) {
+    await models.like.deleteById(existing.id);
+    return { liked: false };
+  }
 
-  return await models.like.create({ userId, entryId });
+  await models.like.create({ userId, entryId });
+  return { liked: true };
 }
 
-async function createOnComment({ commentId, currentUser }) {
+async function toggleOnComment({ commentId, currentUser }) {
   if (!currentUser.id && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
-
   const userId = currentUser.id;
 
-
-  // Verify user 
   const user = await models.user.findById(userId);
   if (!user) throw new Error('USER_NOT_FOUND');
-  // Verify comment 
+
   const comment = await models.comment.findById(commentId);
   if (!comment) throw new Error('COMMENT_NOT_FOUND');
 
-  //Verify Like doesnt exist yet
-  const exists = await models.like.findUnique({ userId_commentId: { userId, commentId } });
-  if (exists) throw new Error('LIKE_ALREADY_EXISTS');
+  const existing = await models.like.findUnique({ userId_commentId: { userId, commentId } });
+  if (existing) {
+    await models.like.deleteById(existing.id);
+    return { liked: false };
+  }
 
-  return await models.like.create({ userId, commentId });
+  await models.like.create({ userId, commentId });
+  return { liked: true };
 }
 async function getByComment(commentId) {
   // Verify comment 
@@ -61,14 +62,6 @@ async function getById(id) {
   return like;
 }
 
-async function deleteById({ id, currentUser }) {
-  const like = await models.like.findById(id);
-  if (!like) throw new Error('LIKE_NOT_FOUND');
-
-  if (currentUser.id !== like.userId && currentUser.role !== 'ADMIN') throw new Error('ACCESS_DENIED');
-
-  return await models.like.deleteById(id);
-}
 
 
-export default { createOnEntry, createOnComment, getById, getByComment, getByEntry, deleteById }
+export default { toggleOnEntry, toggleOnComment, getById, getByComment, getByEntry }

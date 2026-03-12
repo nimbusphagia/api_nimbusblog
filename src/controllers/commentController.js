@@ -64,7 +64,7 @@ async function deleteById(req, res, next) {
     }
     const { commentId } = req.params;
     await commentService.deleteById({ id: commentId, currentUser });
-    res.status(204);
+    return res.status(204).end();
   } catch (error) {
     next(error);
   }

@@ -23,6 +23,15 @@ async function getByAuthor(authorId) {
   const entries = await models.entry.findAll({ authorId });
   return entries;
 }
+async function getByAuthorPublished(authorId) {
+  // Verify author 
+  const author = await models.user.findById(authorId);
+  if (!author) throw new Error('USER_NOT_FOUND');
+  if (author.role !== 'AUTHOR' && author.role !== 'ADMIN') throw new Error('AUTHOR_NOT_FOUND');
+
+  const entries = await models.entry.findAll({ authorId, publishedAt: { not: null } });
+  return entries;
+}
 async function getById(id) {
   const entry = await models.entry.findById(id);
   if (!entry) throw new Error('ENTRY_NOT_FOUND');
@@ -79,4 +88,4 @@ async function getMostLiked({ authorId }) {
   if (!author) throw new Error('AUTHOR_NOT_FOUND');
   return await models.entry.getMostLiked({ authorId });
 }
-export default { create, getAll, getById, getByAuthor, update, deleteById, publish, getMostRecentPublished, getMostLiked }
+export default { create, getAll, getById, getByAuthor, getByAuthorPublished, update, deleteById, publish, getMostRecentPublished, getMostLiked }

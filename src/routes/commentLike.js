@@ -7,10 +7,8 @@ const commentLikeRouter = new Router({ mergeParams: true });
 commentLikeRouter.get('/', likeController.getByComment);
 
 // Create a like
-commentLikeRouter.post('/', likeController.createOnComment);
+commentLikeRouter.post('/', likeController.toggleOnComment);
 
-// Remove like
-commentLikeRouter.delete('/:likeId', likeController.deleteById);
 
 
 export default commentLikeRouter;
