@@ -5,7 +5,11 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 app.use('/api', router);
 app.use(errorHandler);
+/*
+ *
 app.listen(process.env.PORT, () => {
   console.log(`Example app listening on port ${process.env.PORT}!`);
 })
+*
+*/
 export default app;
