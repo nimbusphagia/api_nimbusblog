@@ -10,7 +10,13 @@ async function findById(id) {
     where: {
       id
     },
+
     include: {
+      _count: {
+        select: {
+          likes: true
+        }
+      },
       blocks: {
         orderBy: {
           index: 'asc'
@@ -31,6 +37,7 @@ async function findById(id) {
             select: {
               name: true,
               imgUrl: true,
+              role: true,
             },
           },
           _count: {

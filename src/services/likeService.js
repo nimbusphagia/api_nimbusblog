@@ -63,5 +63,4 @@ async function getById(id) {
 }
 
 
-
 export default { toggleOnEntry, toggleOnComment, getById, getByComment, getByEntry }

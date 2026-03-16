@@ -6,6 +6,7 @@ const publicUserSelect = {
   role: true,
   description: true,
   imgUrl: true,
+  likes: true,
 };
 
 async function create(data) {
